@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DARK WORLD // ELITE TERMINAL</title>
+    <title>DARK WORLD // QUANTUM TERMINAL</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,8 +11,8 @@
     <style>
         :root { 
             --neon: #00ff00; 
-            --dark-bg: #030a03;
-            --glass: rgba(0, 20, 0, 0.85);
+            --dark-bg: #020802;
+            --glass: rgba(0, 20, 0, 0.9);
             --blue-tick: #00d2ff;
             --stamp: #ff0040;
         }
@@ -23,18 +23,17 @@
             background: var(--dark-bg); 
             color: var(--neon); 
             overflow-x: hidden;
-            background-image: radial-gradient(circle at center, #0a2a0a 0%, #030a03 100%);
+            background-image: radial-gradient(circle at center, #0a2a0a 0%, #020802 100%);
         }
 
-        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
+        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; }
 
-        /* Main Container */
         .app-container {
             width: 95%; max-width: 900px; margin: 40px auto;
             background: var(--glass);
             border: 1px solid rgba(0, 255, 0, 0.3);
             border-radius: 15px; padding: 30px;
-            box-shadow: 0 0 50px rgba(0, 255, 0, 0.1), inset 0 0 20px rgba(0, 255, 0, 0.05);
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.1);
             backdrop-filter: blur(15px);
             position: relative;
         }
@@ -47,7 +46,6 @@
             filter: drop-shadow(0 0 10px var(--neon));
         }
 
-        /* Professional Tabs */
         .tab-panel { display: flex; gap: 10px; margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 8px; }
         .tab-btn { 
             flex: 1; padding: 15px; border: none; background: transparent; 
@@ -60,24 +58,21 @@
         .section.active { display: block; animation: slideUp 0.6s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Form Styling */
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .input-box { position: relative; }
-        label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 8px; letter-spacing: 1px; }
+        label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 8px; }
         input, select, textarea { 
             width: 100%; background: rgba(0,0,0,0.6); border: 1px solid #004400; 
             color: var(--neon); padding: 12px; border-radius: 5px; outline: none; transition: 0.3s;
         }
         input:focus { border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,0,0.2); }
 
-        /* Upload Area */
         .upload-section { display: flex; gap: 20px; margin-bottom: 30px; }
         .upload-card {
             flex: 1; height: 140px; border: 1px dashed #006600; border-radius: 10px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; position: relative; transition: 0.3s; background: rgba(0,0,0,0.3);
+            cursor: pointer; position: relative; background: rgba(0,0,0,0.3);
         }
-        .upload-card:hover { border-color: var(--neon); background: rgba(0,255,0,0.05); }
         .upload-card img { position: absolute; width: 100%; height: 100%; object-fit: contain; border-radius: 10px; display: none; }
 
         .btn-pro {
@@ -95,20 +90,21 @@
         }
         .verify-header { display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #004400; padding-bottom: 20px; margin-bottom: 20px; }
         .verify-photo { width: 120px; height: 150px; border: 2px solid var(--neon); border-radius: 5px; }
-        .info-row { margin-bottom: 10px; display: flex; font-size: 0.95rem; }
-        .label-tag { color: #888; width: 120px; flex-shrink: 0; }
-        .blue-tick { color: var(--blue-tick); margin-left: 10px; filter: drop-shadow(0 0 5px var(--blue-tick)); }
 
         /* Export Card Styling (Hidden) */
         #png-card {
-            position: fixed; left: -5000px; width: 550px; height: 320px;
+            position: fixed; left: -5000px; width: 600px; height: 350px;
             background: #000; border: 4px solid #0f0; padding: 25px; color: #0f0;
         }
         .stamp-box {
-            position: absolute; right: 25px; bottom: 25px;
+            position: absolute; right: 25px; bottom: 120px;
             border: 3px solid var(--stamp); color: var(--stamp);
             padding: 5px 10px; transform: rotate(-12deg); font-weight: bold;
-            border-radius: 3px; font-size: 14px; text-transform: uppercase;
+            font-size: 14px; text-transform: uppercase;
+        }
+        .qr-holder {
+            position: absolute; bottom: 25px; right: 25px;
+            width: 85px; height: 85px; background: #fff; padding: 5px; border-radius: 3px;
         }
     </style>
 </head>
@@ -117,10 +113,10 @@
     <canvas id="matrix-canvas"></canvas>
 
     <div id="png-card">
-        <h2 style="text-align:center; border-bottom:1.5px solid #0f0; padding-bottom:10px; letter-spacing:2px;">DARK WORLD OFFICIAL AGENT</h2>
+        <h2 style="text-align:center; border-bottom:1.5px solid #0f0; padding-bottom:10px; letter-spacing:2px;">DARK WORLD // OFFICIAL ASSET</h2>
         <div style="display:flex; margin-top:25px; gap:25px;">
-            <img id="ex-pic" src="" style="width:130px; height:160px; border:1px solid #0f0; object-fit: cover;">
-            <div style="font-size: 17px; line-height: 1.7;">
+            <img id="ex-pic" src="" style="width:140px; height:170px; border:1px solid #0f0; object-fit: cover;">
+            <div style="font-size: 17px; line-height: 1.8;">
                 <div id="ex-id"></div>
                 <div id="ex-name"></div>
                 <div id="ex-email"></div>
@@ -128,11 +124,13 @@
                 <div id="ex-phone"></div>
             </div>
         </div>
-        <div class="stamp-box">VERIFIED BY<br>DARK WORLD TEAM</div>
+        <div class="stamp-box">ENCRYPTED<br>VERIFIED</div>
+        <div class="qr-holder"><img id="ex-qr" src="" style="width:100%; height:100%;"></div>
+        <div style="position:absolute; bottom:25px; left:25px; font-size:10px; opacity:0.6;">SCAN QR TO VALIDATE CLEARANCE</div>
     </div>
 
     <div class="app-container">
-        <h1 class="header-title">Dark world Access Portal</h1>
+        <h1 class="header-title">Quantum Access Portal</h1>
 
         <div class="tab-panel">
             <button class="tab-btn active" id="tab-reg" onclick="switchTab('register')">Agent Enrollment</button>
@@ -143,34 +141,37 @@
             <form id="regForm">
                 <div class="upload-section">
                     <div class="upload-card" onclick="document.getElementById('file-u').click()">
-                        <i class="fas fa-user-shield fa-2x"></i><span>PROFILE PHOTO</span>
+                        <i class="fas fa-user-shield fa-2x"></i><span>PHOTO</span>
                         <img id="prev-u"><input type="file" id="file-u" style="display:none" required>
                     </div>
                     <div class="upload-card" onclick="document.getElementById('file-n').click()">
-                        <i class="fas fa-file-invoice fa-2x"></i><span>DOCUMENTS (NID)</span>
+                        <i class="fas fa-file-invoice fa-2x"></i><span>NID (DOCS)</span>
                         <img id="prev-n"><input type="file" id="file-n" style="display:none" required>
                     </div>
                 </div>
 
                 <div class="grid-layout">
-                    <div class="input-box"><label>AGENT FULL NAME</label><input type="text" id="name" required></div>
-                    <div class="input-box"><label>EMAIL ADDRESS</label><input type="email" id="email" required></div>
-                    <div class="input-box"><label>SECURE PHONE</label><input type="number" id="phone" required></div>
-                    <div class="input-box"><label>ACCESS KEY (PASS)</label><input type="password" id="pass" required></div>
-                    <div class="input-box"><label>DATE OF INCEPTION</label><input type="date" id="dob" required></div>
-                    <div class="input-box"><label>CLEARANCE RANK</label>
-                        <select id="level"><option value="New Recruit">New Recruit</option><option value="Shadow Agent">Shadow Agent</option><option value="Elite Pro">Elite Pro</option></select>
+                    <div class="input-box"><label>NAME</label><input type="text" id="name" required></div>
+                    <div class="input-box"><label>EMAIL</label><input type="email" id="email" required></div>
+                    <div class="input-box"><label>PHONE</label><input type="number" id="phone" required></div>
+                    <div class="input-box"><label>PASSWORD</label><input type="password" id="pass" required></div>
+                    <div class="input-box"><label>DOB</label><input type="date" id="dob" required></div>
+                    <div class="input-box"><label>RANK</label>
+                        <select id="level">
+                            <option value="New Recruit">New Recruit</option>
+                            <option value="Shadow Agent">Shadow Agent</option>
+                            <option value="Elite Pro">Elite Pro</option>
+                        </select>
                     </div>
-                    <div class="input-box" style="grid-column: 1/-1;"><label>FAMILY & LINEAGE DETAILS</label><textarea id="family" rows="2" placeholder="Father: Name (Job), Mother: Name (Job)..." required></textarea></div>
-                    <div class="input-group" style="grid-column: 1/-1;"><label>CURRENT SECTOR (ADDRESS)</label><textarea id="addr" rows="2" required></textarea></div>
+                    <div class="input-box" style="grid-column: 1/-1;"><label>FAMILY DETAILS</label><textarea id="family" rows="2" required></textarea></div>
+                    <div class="input-box" style="grid-column: 1/-1;"><label>ADDRESS</label><textarea id="addr" rows="2" required></textarea></div>
                 </div>
-                <button type="submit" class="btn-pro">ENROLL INTO DATABASE</button>
+                <button type="submit" class="btn-pro">EXECUTE ENROLLMENT</button>
             </form>
         </div>
 
         <div id="verify" class="section">
             <div style="text-align: center; max-width: 400px; margin: 0 auto;">
-                <label>SEARCH BY AGENT ID</label>
                 <input type="text" id="v-search" placeholder="DW-XXXXX" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
                 <button onclick="searchAgent()" class="btn-pro">SCAN SYSTEM</button>
             </div>
@@ -199,11 +200,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Matrix Rain Logic
+        // Matrix Rain
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@";
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const drops = Array.from({length: canvas.width/18}).fill(1);
         function drawMatrix() {
             ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width, canvas.height);
@@ -238,68 +239,71 @@
         document.getElementById('file-u').onchange = (e) => compress(e.target.files[0], (res) => { userBase64 = res; document.getElementById('prev-u').src = res; document.getElementById('prev-u').style.display='block'; });
         document.getElementById('file-n').onchange = (e) => compress(e.target.files[0], (res) => { nidBase64 = res; document.getElementById('prev-n').src = res; document.getElementById('prev-n').style.display='block'; });
 
-        // Advanced Dual Download
+        // Dual Download Logic with QR Code
         async function advancedDownload(data) {
-            // PNG Setup
+            // QR Generation
+            const qrPayload = `DARK WORLD AGENT\nID: ${data.dwID}\nNAME: ${data.name}\nRANK: ${data.level}\nEMAIL: ${data.email}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrPayload)}`;
+
+            // Populate PNG
             document.getElementById('ex-pic').src = data.photo;
+            document.getElementById('ex-qr').src = qrUrl;
             document.getElementById('ex-id').innerText = "AGENT ID: " + data.dwID;
             document.getElementById('ex-name').innerText = "NAME: " + data.name;
             document.getElementById('ex-email').innerText = "EMAIL: " + data.email;
             document.getElementById('ex-rank').innerText = "RANK: " + data.level;
-            document.getElementById('ex-phone').innerText = "CONTACT: " + data.phone;
+            document.getElementById('ex-phone').innerText = "PH: " + data.phone;
 
+            // Wait for QR to load
+            await new Promise(resolve => document.getElementById('ex-qr').onload = resolve);
+
+            // Export PNG
             const pngWrap = document.getElementById('png-card');
-            const canvasObj = await html2canvas(pngWrap);
+            const canvasObj = await html2canvas(pngWrap, { useCORS: true });
             const pngLink = document.createElement('a');
-            pngLink.download = `${data.dwID}_Identity.png`;
+            pngLink.download = `${data.dwID}_ID.png`;
             pngLink.href = canvasObj.toDataURL();
             pngLink.click();
 
-            // PDF Setup (Delayed)
+            // Export PDF after delay
             setTimeout(() => {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('l', 'mm', [160, 100]);
                 pdf.setFillColor(0,0,0); pdf.rect(0,0,160,100,'F');
                 pdf.setDrawColor(0,255,0); pdf.rect(5,5,150,90);
                 pdf.setTextColor(0,255,0);
-                pdf.setFontSize(14); pdf.text("DARK WORLD ELITE MEMBER", 80, 15, {align:'center'});
-                pdf.addImage(data.photo, 'JPEG', 10, 25, 38, 48);
+                pdf.setFontSize(14); pdf.text("DARK WORLD ELITE PASS", 80, 15, {align:'center'});
+                pdf.addImage(data.photo, 'JPEG', 10, 25, 40, 50);
                 pdf.setFontSize(10);
                 pdf.text(`ID: ${data.dwID}`, 55, 35);
                 pdf.text(`NAME: ${data.name}`, 55, 45);
-                pdf.text(`EMAIL: ${data.email}`, 55, 55);
-                pdf.text(`RANK: ${data.level}`, 55, 65);
-                pdf.text(`PH: ${data.phone}`, 55, 75);
-                
-                // Red Stamp on PDF
+                pdf.text(`RANK: ${data.level}`, 55, 55);
+                pdf.text(`EMAIL: ${data.email}`, 55, 65);
+                // Add QR and Stamp to PDF
+                pdf.addImage(qrUrl, 'PNG', 125, 65, 25, 25);
                 pdf.setDrawColor(255, 0, 60); pdf.setTextColor(255, 0, 60);
-                pdf.rect(115, 70, 35, 18);
-                pdf.text("DARK WORLD", 132.5, 78, {align:'center'});
-                pdf.text("VERIFIED AGENT", 132.5, 84, {align:'center'});
-                pdf.save(`${data.dwID}_Asset.pdf`);
+                pdf.rect(120, 45, 30, 15);
+                pdf.text("VERIFIED", 135, 54, {align:'center'});
+                pdf.save(`${data.dwID}_PASSPORT.pdf`);
             }, 2500);
         }
 
         document.getElementById('regForm').onsubmit = async (e) => {
             e.preventDefault();
             const dwID = "DW" + Math.floor(10000 + Math.random() * 90000);
-            const email = document.getElementById('email').value;
             try {
-                const cred = await createUserWithEmailAndPassword(auth, email, document.getElementById('pass').value);
+                const cred = await createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value);
                 await sendEmailVerification(cred.user);
                 const d = {
-                    uid: cred.user.uid, dwID, email,
-                    name: document.getElementById('name').value, 
-                    phone: document.getElementById('phone').value,
-                    level: document.getElementById('level').value, 
-                    photo: userBase64, nid: nidBase64,
-                    family: document.getElementById('family').value, 
-                    dob: document.getElementById('dob').value,
+                    uid: cred.user.uid, dwID, email: document.getElementById('email').value,
+                    name: document.getElementById('name').value, phone: document.getElementById('phone').value,
+                    level: document.getElementById('level').value, photo: userBase64, nid: nidBase64,
+                    family: document.getElementById('family').value, dob: document.getElementById('dob').value,
                     addr: document.getElementById('addr').value
                 };
                 await setDoc(doc(db, "agents", cred.user.uid), d);
                 await advancedDownload(d);
-                alert("ENROLLMENT SUCCESSFUL. ID GENERATED.");
+                alert("ENROLLED! SYSTEM GENERATING ASSETS...");
                 location.reload();
             } catch (err) { alert(err.message); }
         };
@@ -307,36 +311,27 @@
         window.searchAgent = async () => {
             const id = document.getElementById('v-search').value.toUpperCase();
             const res = document.getElementById('verify-result');
-            res.innerHTML = "INTERROGATING SYSTEM..."; res.style.display = "block";
+            res.innerHTML = "INTERROGATING DATABASE..."; res.style.display = "block";
             const q = query(collection(db, "agents"), where("dwID", "==", id));
             const snap = await getDocs(q);
-            if(snap.empty) { res.innerHTML = "<h2 style='color:red; text-align:center;'>ACCESS DENIED: UNKNOWN IDENTITY</h2>"; return; }
+            if(snap.empty) { res.innerHTML = "<h2 style='color:red;'>ACCESS DENIED: IDENTITY UNKNOWN</h2>"; return; }
             const d = snap.docs[0].data();
             res.innerHTML = `
                 <div class="verify-header">
                     <img src="${d.photo}" class="verify-photo">
                     <div>
-                        <h2 style="color:#fff">${d.name} <i class="fas fa-check-circle blue-tick"></i></h2>
-                        <p style="color:var(--neon)">STATUS: OFFICIAL AGENT</p>
-                        <p>ID: ${d.dwID}</p>
+                        <h2 style="color:#fff">${d.name} <i class="fas fa-check-circle" style="color:#00d2ff"></i></h2>
+                        <p>ID: ${d.dwID}</p><p>RANK: ${d.level}</p>
                     </div>
                 </div>
                 <div class="grid-layout" style="font-size: 0.9rem;">
-                    <div><span class="label-tag">EMAIL:</span> ${d.email}</div>
-                    <div><span class="label-tag">PHONE:</span> ${d.phone}</div>
-                    <div><span class="label-tag">CLEARANCE:</span> ${d.level}</div>
-                    <div><span class="label-tag">DOB:</span> ${d.dob}</div>
-                </div>
-                <div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-radius:5px;">
-                    <p style="color:var(--neon); margin-bottom:5px;">FAMILY DETAILS:</p>
-                    <p style="color:#fff">${d.family}</p>
-                </div>
-                <div style="margin-top:15px; padding:15px; background:rgba(0,0,0,0.3); border-radius:5px;">
-                    <p style="color:var(--neon); margin-bottom:5px;">SECTOR/ADDRESS:</p>
-                    <p style="color:#fff">${d.addr}</p>
+                    <div><span style="color:#888">EMAIL:</span> ${d.email}</div>
+                    <div><span style="color:#888">PHONE:</span> ${d.phone}</div>
+                    <div><span style="color:#888">ADDRESS:</span> ${d.addr}</div>
+                    <div><span style="color:#888">FAMILY:</span> ${d.family}</div>
                 </div>
                 <div style="margin-top:20px;">
-                    <p style="color:#888; font-size:0.7rem; margin-bottom:10px;">SECURE NID DATA:</p>
+                    <p style="color:#888; font-size:0.7rem; margin-bottom:5px;">SECURE NID DATA:</p>
                     <img src="${d.nid}" style="max-width:100%; border:1px solid #333; border-radius:5px;">
                 </div>`;
         };
